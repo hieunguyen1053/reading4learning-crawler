@@ -1,0 +1,4 @@
+Django==4.0
+APScheduler==3.8.1
+Scrapy==2.5.1
+nltk==3.6.5
