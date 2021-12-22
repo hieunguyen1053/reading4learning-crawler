@@ -2,3 +2,6 @@ Django==4.0
 APScheduler==3.8.1
 Scrapy==2.5.1
 nltk==3.6.5
+domonic==0.8.3
+scikit-learn==1.0.1
+newspaper3k==0.2.8
