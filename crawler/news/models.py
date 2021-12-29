@@ -143,11 +143,12 @@ class News(models.Model):
 
         author = HTMLSpanElement()
         authors = eval(self.author)
-        if len(authors) > 1:
-            author.nodeValue = 'Authors: ' + ' '.join(authors)
-        else:
-            author.nodeValue = 'Author: ' + authors[0]
-        result.append(author)
+        if len(authors) > 0:
+            if len(authors) > 1:
+                author.nodeValue = 'Authors: ' + ' '.join(authors)
+            else:
+                author.nodeValue = 'Author: ' + authors[0]
+            result.append(author)
 
         result.append(HTMLBRElement())
 

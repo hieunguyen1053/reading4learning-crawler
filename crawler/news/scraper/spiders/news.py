@@ -44,12 +44,18 @@ class WebsiteSpider(scrapy.Spider):
         for article in root.article_urls():
             yield scrapy.Request(url=article, callback=self.parse_item, headers=self.header)
 
+        for category in root.category_urls():
+            yield scrapy.Request(url=category, callback=self.parse, headers=self.header)
+
     def parse_item(self, response):
         article = Article(response.url, keep_article_html=True)
         article.set_html(response.body)
         article.parse()
 
         if not article.is_valid_body():
+            return
+
+        if article.is_media_news():
             return
 
         item = ScraperItem()

@@ -25,7 +25,7 @@ class MyArticle(Article):
             return result
 
         categories = []
-        keywords = ['topic', 'category', 'categories', 'section']
+        keywords = ['topic', 'category', 'categories', 'section', 'vertical']
         for key, value in iter_to_leaf(dict(self.meta_data)).items():
             for k in keywords:
                 if k in key:
@@ -50,8 +50,6 @@ class MyArticle(Article):
                 try:
                     return date_parser(date_str)
                 except (ValueError, OverflowError, AttributeError, TypeError):
-                    # near all parse failures are due to URL dates without a day
-                    # specifier, e.g. /2014/04/
                     return None
 
         keywords = ['date', 'created']
