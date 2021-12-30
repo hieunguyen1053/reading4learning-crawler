@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TedTalks
+from .models import TedTalks, Vocab
 
 
 # Register your models here.
@@ -11,9 +11,8 @@ class TedTalksAdmin(admin.ModelAdmin):
     readonly_fields = ('slug', 'url', 'transcript', 'statistics')
     list_per_page = 20
 
-    # Hide add button
-    def has_add_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+@admin.register(Vocab)
+class VocabAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+    fields = ('idf', 'topk', 'vocab')
+    readonly_fields = ('vocab',)

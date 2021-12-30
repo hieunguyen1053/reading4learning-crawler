@@ -29,5 +29,6 @@ class SubscenceSpider(CrawlSpider):
         item['id'] = response.url.split('/')[-1]
         item['url'] = response.url
         referer = response.request.headers[b'Referer'].decode('utf-8')
+        item['referer'] = referer
         item['title'] = referer.split('/')[-3]
         return item

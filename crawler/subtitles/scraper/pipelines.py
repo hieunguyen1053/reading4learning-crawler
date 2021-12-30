@@ -12,17 +12,30 @@ import requests
 from bs4 import BeautifulSoup
 from itemadapter import ItemAdapter
 
+from ..models import Subtitles
+from ..utils import get_word_count
+
 DIR = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(DIR, '../data')
 
 
-class WriteFilePipeline:
+class WriteDBPipeline:
     def process_item(self, item, spider):
         zip_file = self.download_file(item)
         data = self.extract_srt_file(zip_file)
         content = self.extract_text(data)
-        with open(os.path.join(DATA, item['title'] + '.txt'), 'w') as f:
-            f.write('\n'.join(content))
+
+        transcript = '\n'.join(content)
+        statistics = get_word_count(transcript)
+
+        Subtitles.objects.update_or_create(
+            title=item['title'],
+            url=item['url'],
+            referer=item['referer'],
+            transcript='\n'.join(content),
+            statistics=statistics,
+        )
+        return item
 
     def download_file(self, item):
         resp = requests.get(item['url'])

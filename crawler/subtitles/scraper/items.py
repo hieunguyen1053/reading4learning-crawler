@@ -10,3 +10,4 @@ class ScraperItem(scrapy.Item):
     id = scrapy.Field()
     url = scrapy.Field()
     title = scrapy.Field()
+    referer = scrapy.Field()
