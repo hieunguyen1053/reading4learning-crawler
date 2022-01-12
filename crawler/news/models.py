@@ -1,4 +1,5 @@
 import logging
+import uuid
 from urllib.parse import urlparse
 
 from django.db import models
@@ -71,7 +72,8 @@ class Website(models.Model):
         logging.getLogger('urllib3').setLevel(logging.WARNING)
         logging.getLogger('newspaper').setLevel(logging.WARNING)
         process = CrawlerRunner(self.config)
-        process.crawl(WebsiteSpider, name=self.name, url=self.url, domain=urlparse(self.url).netloc)
+        process.crawl(WebsiteSpider, name=self.name, url=self.url,
+                      domain=urlparse(self.url).netloc)
 
     def update_job(self):
         if self.job_id is not None:
@@ -108,15 +110,19 @@ class Website(models.Model):
 
 
 class News(models.Model):
-    url = models.URLField(max_length=100, unique=True)
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=100)
+    html_content = models.TextField()
     content = models.TextField()
-    top_image = models.URLField(max_length=100)
-    author = models.CharField(max_length=100)
-    publish_date = models.DateField()
 
-    categories = models.CharField(max_length=256)
+    author = models.CharField(max_length=100, blank=True, null=True)
+    date_published = models.DateField()
 
+    lead_image_url = models.URLField(max_length=100)
+    url = models.URLField(max_length=100, unique=True)
+    domain = models.CharField(max_length=100)
+
+    word_count = models.IntegerField()
     statistics = models.TextField()
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -126,66 +132,13 @@ class News(models.Model):
         verbose_name = _('News')
         verbose_name_plural = _('News')
 
-    @property
-    def html(self):
-        result = HTMLDivElement()
 
-        title = HTMLHeadingElement()
-        title.nodeValue = self.title
-        result.append(title)
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-        categories = HTMLSpanElement()
-        categories.nodeValue = self.categories
-        categories.nodeValue = ', '.join([c.title() for c in eval(self.categories)])
-        result.append(categories)
-
-        result.append(HTMLBRElement())
-
-        author = HTMLSpanElement()
-        authors = eval(self.author)
-        if len(authors) > 0:
-            if len(authors) > 1:
-                author.nodeValue = 'Authors: ' + ' '.join(authors)
-            else:
-                author.nodeValue = 'Author: ' + authors[0]
-            result.append(author)
-
-        result.append(HTMLBRElement())
-
-        publish_date = HTMLSpanElement()
-        publish_date.nodeValue = self.publish_date.strftime('%Y %b, %d')
-        result.append(publish_date)
-
-        result.append(HTMLBRElement())
-
-        content = self.content.split('\n')
-        paragraph = HTMLParagraphElement()
-        paragraph.nodeValue = content[0]
-        content.pop(0)
-
-        result.append(paragraph)
-
-        image = HTMLImageElement()
-        image.setAttribute('src', self.top_image)
-        image.setAttribute('style', 'width: 100%;')
-        result.append(image)
-
-        for line in content:
-            if line.isupper():
-                paragraph = HTMLElement()
-                paragraph.name = 'h4'
-            else:
-                paragraph = HTMLParagraphElement()
-            paragraph.nodeValue = line
-            result.append(paragraph)
-
-        reference = HTMLSpanElement()
-        anchor = HTMLAnchorElement()
-        anchor.setAttribute('href', self.url)
-        anchor.nodeValue = self.url
-
-        reference.append("Source: ")
-        reference.append(anchor)
-        result.append(reference)
-
-        return result.toString()
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')

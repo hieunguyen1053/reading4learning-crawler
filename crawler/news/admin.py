@@ -5,7 +5,7 @@ from django.db.models import fields
 
 from .apps import scheduler
 # Register your models here.
-from .models import Website, News
+from .models import Category, News, Website
 
 
 @admin.register(Website)
@@ -50,12 +50,16 @@ class WebsiteAdmin(admin.ModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'url')
-    search_fields = ('title', 'url')
-    readonly_fields = ('html',)
+    list_display = ('title', 'domain', 'date_published')
+    search_fields = ('title', 'domain', 'content')
 
     fieldsets = (
-        (None, {'fields': ('url', 'title', 'content', 'top_image', 'author', 'publish_date', 'categories')}),
-        ('HTML', {'fields': ('html',)}),
+        (None, {'fields': ('url', 'title', 'content', 'lead_image_url', 'author', 'date_published')}),
+        ('HTML', {'fields': ('html_content', )}),
         ('Statistics', {'fields': ('statistics',)}),
     )
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'parent', 'created_at', 'updated_at')
