@@ -6,11 +6,11 @@
 
 import os
 
+from commons.utils import get_word_count
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 
 from ..models import TedTalks
-from ..utils import get_word_count
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(DIR, '../data')

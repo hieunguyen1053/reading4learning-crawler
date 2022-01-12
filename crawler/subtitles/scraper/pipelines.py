@@ -10,10 +10,10 @@ import zipfile
 
 import requests
 from bs4 import BeautifulSoup
+from commons.utils import get_word_count
 from itemadapter import ItemAdapter
 
 from ..models import Subtitles
-from ..utils import get_word_count
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(DIR, '../data')

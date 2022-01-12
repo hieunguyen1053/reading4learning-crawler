@@ -31,4 +31,4 @@ class SubtitlesConfig(AppConfig):
 
     def ready(self):
         pass
-        start_crawling()
+        # start_crawling()

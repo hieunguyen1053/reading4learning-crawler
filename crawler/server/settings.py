@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'news',
     'tedtalks',
     'subtitles',
+    'vocabulary',
 ]
 
 MIDDLEWARE = [
