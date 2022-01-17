@@ -43,6 +43,7 @@ def normalize(text):
     text = re.sub("'d", ' would', text)
     text = re.sub("'ll", ' will', text)
     text = re.sub("'m", ' am', text)
+    text = re.sub("n't", ' not', text)
     return text
 
 
