@@ -3,8 +3,8 @@ from django.db import models
 
 # Create your models here.
 class TedTalks(models.Model):
-    slug = models.SlugField(max_length=100, unique=True)
-    url = models.URLField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=256, unique=True)
+    url = models.URLField(max_length=256, unique=True)
     transcript = models.TextField()
     statistics = models.TextField()
 

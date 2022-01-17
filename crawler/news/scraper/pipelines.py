@@ -5,10 +5,10 @@
 
 import os
 
+from commons.utils import get_word_count
 from itemadapter import ItemAdapter
 
 from ..models import News
-from ..utils import get_word_count
 
 
 class WriteDBPipeline:

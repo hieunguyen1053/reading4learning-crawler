@@ -17,7 +17,19 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 
+from news.views import *
+from vocabulary.views import *
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'api/v1/vocabulary', include('vocabulary.urls')),
+    # News
+    path(r'api/v1/news/<uuid:news_id>', get_news_detail, name='news_detail'),
+    path(r'api/v1/news/<uuid:news_id>/view', get_news_view, name='news_html'),
+    # Categories
+    path(r'api/v1/category', get_all_categories, name='list_categories'),
+    path(r'api/v1/category/<str:category_name>', get_news_by_category, name='news_by_category'),
+    # Vocabulary
+    path(r'api/v1/vocabulary', get_all_words, name='list_vocabulary'),
+    path(r'api/v1/target', get_all_targets, name='list_target'),
+    path(r'api/v1/field', get_all_fields, name='list_field'),
 ]

@@ -50,11 +50,11 @@ class WebsiteAdmin(admin.ModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'domain', 'date_published')
+    list_display = ('title', 'domain', 'date_published', 'updated_at',)
     search_fields = ('title', 'domain', 'content')
 
     fieldsets = (
-        (None, {'fields': ('url', 'title', 'content', 'lead_image_url', 'author', 'date_published')}),
+        (None, {'fields': ('url', 'title', 'content', 'lead_image_url', 'author', 'date_published', 'categories')}),
         ('HTML', {'fields': ('html_content', )}),
         ('Statistics', {'fields': ('statistics',)}),
     )
